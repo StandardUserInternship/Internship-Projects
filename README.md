@@ -17,4 +17,3 @@ Details for each development project used in the StandardUser Training Internshi
 
 ## Labs
 Students can pick their own labs or complete them in the recommended order
-| One | Two | Three |
