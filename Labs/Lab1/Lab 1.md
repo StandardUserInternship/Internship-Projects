@@ -6,35 +6,35 @@ This lab is made up of two parts that introduce two different networking librari
 In general all that interns will need to understand about HTTP requests is that HTTP requests are how data is sent and received by websites. The most common requests are GET and POST, which are used to get data and send data respectively.
 
 Here are some links with more information about HTTP requests:
-https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
-https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+* https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+* https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 
 Here are some links with information about the APIs in Python and the Requests library:
-https://realpython.com/python-requests/
-https://realpython.com/python-api/ 
+* https://realpython.com/python-requests/
+* https://realpython.com/python-api/ 
 
 Here is the official documentation for the Requests Library:
-https://docs.python-requests.org/en/latest/
+* https://docs.python-requests.org/en/latest/
 
 Installing the requests library:
-In the VS Code Terminal create a virtual environment
-Run the command ‘pip install requests’
+1. In the VS Code Terminal create a virtual environment
+2. Run the command ‘pip install requests’
 
 ### Lab Assignment
 Create a command line application that uses the requests library to send a Get request and a POST request to an api. The application should print out the data that it receives from each request, or the status code if the request fails.
 
 Some APIs that can be used for this assignment include DnD, Cats, NASA, & Other APIs
-A free API with POST requests enabled can be found here.
+A free API with POST requests enabled can be found [here](https://jsonplaceholder.typicode.com/).
 
 
 ### Requirements
 One Python file that sends and receives data from an API.
-The file should:
-Send a GET request to at least one API listed above
-Send a POST request to an API
-For both requests, the code should
-Display any data to the user or save it to a file
-Display the HTTP status code to the user through the terminal
+* The file should:
+  * Send a GET request to at least one API listed above
+  * Send a POST request to an API
+  * For both requests, the code should
+    * Display any data to the user or save it to a file
+    * Display the HTTP status code to the user through the terminal
 
 
 ## Lab Part 2 - A brief overview of Packets
@@ -48,13 +48,15 @@ Scapy is a powerful Python library that allows you to interact with packets as t
 To install Scapy follow the instructions listed in the official documentation, or the general summary thats listed below:
 Follow the installation instructions from Scapy’s website. Be aware of the platform specific instructions.
 Install the following network analysis applications:
-On Windows download npcap from the nmap website.
-On Linux install TCPDump through the command line.
-On OSX install libcap through homebrew on the command line.
+1. On Windows download npcap from the nmap website.
+2. On Linux install TCPDump through the command line.
+3. On OSX install libcap through homebrew on the command line.
 
 Run the following command In the terminal for the virtual environment:
-pip install scapy[basic] ( For MacOs use scapy\[basic\] )
-Lab Assignment
+1. pip install scapy[basic] ( For MacOs use scapy\[basic\] )
+
+
+### Lab Assignment
 Create a python program that uses the Scapy library that can read transmitted network traffic. The network traffic that the program will read should be generated through the requests program that you made in Part 1.
 
 Helpful Resources:
@@ -63,9 +65,9 @@ Sniff Function
 Google
 
 ### Requirements
-One Python file that can read the network traffic being sent and received from the API requests. (Hint http traffic is on port 80 and https traffic is on port 443)
-The program should:
-Display the content of the packets to the user through the terminal or by saving to a file.
-Filter the traffic being read to only or primarily the packets related to the API requests. 
-Optional
-This script should filter out irrelevant web traffic and only save the requests to and responses from the chosen API
+* One Python file that can read the network traffic being sent and received from the API requests. (Hint http traffic is on port 80 and https traffic is on port 443)
+* The program should:
+  * Display the content of the packets to the user through the terminal or by saving to a file.
+  * Filter the traffic being read to only or primarily the packets related to the API requests. 
+* Optional
+  * This script should filter out irrelevant web traffic and only save the requests to and responses from the chosen API
