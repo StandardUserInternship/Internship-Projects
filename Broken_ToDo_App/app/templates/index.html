@@ -1,0 +1,177 @@
+<html>
+  <head>
+    <title>To Do App</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.min.js"
+      integrity="sha512-8Y8eGK92dzouwpROIppwr+0kPauu0qqtnzZZNEF8Pat5tuRNJxJXCkbQfJ0HlUG3y1HB3z18CSKmUo7i2zcPpg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/css/bootstrap.min.css"
+      integrity="sha512-XWTTruHZEYJsxV3W/lSXG1n3Q39YIWOstqvmFsdNEEQfHoZ6vm6E9GK2OrF6DSJSpIbRbi+Nn0WDPID9O7xB2Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      type="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.css"
+    />
+    <script>
+      $(document).ready(() => {
+        const reset = () => {
+          document.getElementById("toDoBody").innerHTML = "";
+        };
+
+        const retrieveData = () => {
+          reset();
+          $.ajax({
+            url: "/getToDo",
+            contentType: "application/json",
+            dataType: "json",
+            type: "GET",
+            success: function (response) {
+              response["todo"].forEach((todo) => {
+                document.getElementById("toDoBody").innerHTML += `
+                <tr>
+                  <th scope="row">${todo.id}</th>
+                  <td>${todo.title}</td>
+                  <td>${todo.status}</td>
+                  <td>
+                    <button type="submit" class="btn btn-danger actionBTN" value="DEL_${todo.id}">
+                      Delete
+                    </button>
+                    <button type="submit" class="btn btn-success ms-1 actionBTN" value="FIN_${todo.id}">
+                      Finished
+                    </button>
+                  </td>
+                </tr>
+              `;
+              });
+            },
+          }).then(() => {
+            let acBTNS = document.getElementsByClassName("actionBTN");
+            for (let i = 0; i < acBTNS.length; i++) {
+              acBTNS[i].addEventListener("click", (e) => {
+                let value = e.target.value.split("_");
+                let targetID = value[1];
+                let actionValue = value[0];
+
+                $.ajax({
+                  url: "/toDoActions",
+                  contentType: "application/json",
+                  type: "POST",
+                  dataType: "json",
+                  data: JSON.stringify({ action: targetID, id: actionValue }),
+                  success: (response) => {
+                    if (response.status == "success") {
+                      retrieveData();
+                      Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        text: `The action was successfully completed.`,
+                        timer: 2200,
+                      });
+                    } else {
+                      Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: `The task failed, please try again.`,
+                        timer: 2200,
+                      });
+                    }
+                  },
+                });
+              });
+            }
+          });
+        };
+
+        retrieveData();
+        document.getElementById("createTodo").addEventListener("click", () => {
+          let todoField = document.getElementById("form1");
+          if (todoField.value) {
+            $.ajax({
+              type: "POST",
+              url: "/addToDo",
+              contentType: "application/json",
+              dataType: "json",
+              data: JSON.stringify({ title: todoField.value }),
+              success: (response) => {
+                if (response.status == "success") {
+                  retrieveData();
+                  todoField.value = "";
+                  Swal.fire({
+                    icon: "success",
+                    title: "Success!",
+                    text: `The task was successfully added.`,
+                    timer: 2200,
+                  });
+                }
+              },
+            });
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <section class="vh-100" style="background-color: #eee">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col col-lg-9 col-xl-7">
+            <div class="card rounded-3">
+              <div class="card-body p-4">
+                <h4 class="text-center my-3 pb-3">To Do App</h4>
+
+                <form
+                  class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2"
+                >
+                  <div class="col-12">
+                    <div class="form-outline">
+                      <input type="text" id="form1" class="form-control" />
+                      <label class="form-label" for="form1"
+                        >Enter a task to do here</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      id="createTodo"
+                      style="margin-bottom: 29px"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </form>
+
+                <table class="table mb-4">
+                  <thead>
+                    <tr>
+                      <th scope="col">No.</th>
+                      <th scope="col">Task</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="toDoBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
